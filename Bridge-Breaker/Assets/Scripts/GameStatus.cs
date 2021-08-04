@@ -11,6 +11,20 @@ public class GameStatus : MonoBehaviour
 
     [SerializeField] int gameScore = 0;
 
+    private void Awake()
+    {
+        int gameStatusCount = FindObjectsOfType<GameStatus>().Length;
+        if(gameStatusCount > 1)
+        {
+            // Make game object inactive as destroy doesn't trigger until the end of the frame
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+    }
     private void Start()
     {
         scoreText.text = gameScore.ToString();
@@ -27,5 +41,10 @@ public class GameStatus : MonoBehaviour
         gameScore += pointsPerBlock;
         scoreText.text = gameScore.ToString();
 
+    }
+
+    public void ResetGame()
+    {
+        Destroy(gameObject);
     }
 }
