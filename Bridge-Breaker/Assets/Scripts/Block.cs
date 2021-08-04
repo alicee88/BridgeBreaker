@@ -5,6 +5,7 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     [SerializeField] AudioClip breakSound;
+    [SerializeField] GameObject blockEffects;
 
     Level level;
     GameStatus gameStatus;
@@ -22,6 +23,13 @@ public class Block : MonoBehaviour
         AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position);
         level.RemoveBlock();
         gameStatus.AddPointsToScore();
+        TriggerEffects();
         Destroy(gameObject);
+    }
+
+    private void TriggerEffects()
+    {
+        GameObject effects = Instantiate(blockEffects, transform.position, transform.rotation);
+        Destroy(effects, 2f);
     }
 }
