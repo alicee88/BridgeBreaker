@@ -12,19 +12,34 @@ public class Block : MonoBehaviour
 
     private void Start()
     {
-        level = FindObjectOfType<Level>();
-        level.AddBlock();
-
+        CountBlocks();
         gameStatus = FindObjectOfType<GameStatus>();
+    }
+
+    private void CountBlocks()
+    {
+        level = FindObjectOfType<Level>();
+        if (tag == "Breakable")
+        {
+            level.AddBlock();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position);
-        level.RemoveBlock();
-        gameStatus.AddPointsToScore();
-        TriggerEffects();
-        Destroy(gameObject);
+        DestroyBlock();
+    }
+
+    private void DestroyBlock()
+    {
+        if (tag == "Breakable")
+        {
+            AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position);
+            level.RemoveBlock();
+            gameStatus.AddPointsToScore();
+            TriggerEffects();
+            Destroy(gameObject);
+        }
     }
 
     private void TriggerEffects()
