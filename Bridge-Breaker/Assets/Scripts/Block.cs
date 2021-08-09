@@ -7,7 +7,6 @@ public class Block : MonoBehaviour
 {
     [SerializeField] AudioClip breakSound;
     [SerializeField] GameObject blockEffects;
-    [SerializeField] int maxHits;
     [SerializeField] Sprite[] hitSprites;
 
     Level level;
@@ -33,23 +32,36 @@ public class Block : MonoBehaviour
     {
         if(tag == "Breakable")
         {
-            hitsTaken++;
-            if(hitsTaken >= maxHits)
-            {
-                DestroyBlock();
-            }
-            else
-            {
-                ShowNextHitSprite();
-            }
+            HandleHit();
         }
-        
+
+    }
+
+    private void HandleHit()
+    {
+        int maxHits = hitSprites.Length + 1;
+        hitsTaken++;
+        if (hitsTaken >= maxHits)
+        {
+            DestroyBlock();
+        }
+        else
+        {
+            ShowNextHitSprite();
+        }
     }
 
     private void ShowNextHitSprite()
     {
         int spriteIndex = hitsTaken - 1;
-        GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+        if(hitSprites[spriteIndex] != null)
+        {
+            GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+        }
+        else
+        {
+            Debug.LogError("Block sprite missing from array " + gameObject.name);
+        }
     }
 
     private void DestroyBlock()
